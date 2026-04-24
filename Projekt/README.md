@@ -1,113 +1,116 @@
-# Home Expense Tracker
+# Monitorowanie Wydatków Domowych
 
 System monitorowania wydatków domowych zbudowany w Django z wykorzystaniem wzorca architektonicznego MVC.
 
-## Table of Contents
-- [Features](#features)
-- [Technologies](#technologies)
-- [Installation](#installation)
-- [Running with Docker](#running-with-docker)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Tests](#tests)
+## Spis treści
+- [Funkcjonalności](#funkcjonalności)
+- [Technologie](#technologie)
+- [Instalacja](#instalacja)
+- [Uruchomienie przez Docker](#uruchomienie-przez-docker)
+- [Sposób użycia](#sposób-użycia)
+- [Struktura projektu](#struktura-projektu-mvc)
+- [Testy](#testy)
 
-## Features
+## Funkcjonalności
 
-| Feature | Description |
+| Funkcja | Opis |
 |---|---|
-| **User Authentication** | Registration, login, logout — each user sees only their own data |
-| **Expenses** | Add, edit, delete expenses with title, amount, date, category, description |
-| **Categories** | Custom categories with color picker |
-| **Budgets** | Monthly budget limits per category with progress tracking |
-| **Dashboard** | Overview with statistics, pie chart by category, bar chart for last 6 months |
-| **Search & Filter** | Filter expenses by title, category, date range; sort by date/amount/title |
-| **Currency Rates** | Live exchange rates from NBP (National Bank of Poland) API + PLN converter |
-| **Validation** | Server-side and client-side form validation |
-| **Admin Panel** | Django admin for all models |
+| **Autentykacja użytkowników** | Rejestracja, logowanie, wylogowanie — każdy użytkownik widzi tylko swoje dane |
+| **Wydatki** | Dodawanie, edycja, usuwanie wydatków z tytułem, kwotą, datą, kategorią i opisem |
+| **Kategorie** | Własne kategorie z wyborem koloru |
+| **Budżety** | Miesięczne limity budżetowe per kategoria z paskiem postępu |
+| **Panel główny** | Przegląd ze statystykami, wykres kołowy wg kategorii, wykres słupkowy za ostatnie 6 miesięcy |
+| **Wyszukiwanie i filtrowanie** | Filtrowanie wydatków po tytule, kategorii, zakresie dat; sortowanie po dacie/kwocie/tytule |
+| **Kursy walut** | Aktualne kursy z API NBP + kalkulator PLN do dowolnej waluty |
+| **Zmiana waluty** | Przełączanie wyświetlanej waluty (PLN / EUR / USD / GBP) dla całej aplikacji |
+| **Wielojęzyczność** | Interfejs w języku polskim i angielskim (i18n) |
+| **Walidacja** | Walidacja formularzy po stronie serwera i klienta |
+| **Panel admina** | Django admin dla wszystkich modeli |
 
-## Technologies
+## Technologie
 
 - **Python 3.13** + **Django 6.0**
-- **Bootstrap 5.3** — responsive UI
-- **Chart.js** — interactive charts
-- **Bootstrap Icons** — icon library
-- **SQLite** — database
-- **NBP API** — free currency exchange rates (no API key required)
-- **Docker** — containerization
+- **Bootstrap 5.3** — responsywny interfejs
+- **Chart.js** — interaktywne wykresy
+- **Bootstrap Icons** — biblioteka ikon
+- **SQLite** — baza danych
+- **API NBP** — aktualne kursy walut (bez klucza API)
+- **Docker** — konteneryzacja
 
-## Installation
+## Instalacja
 
-### Requirements
+### Wymagania
 - Python 3.10+
 - pip
 
-### Steps
+### Kroki
 
 ```bash
-# 1. Clone the repository
+# 1. Sklonuj repozytorium
 git clone https://github.com/pythofree/LabMVC.git
 cd LabMVC/Projekt
 
-# 2. Install dependencies
+# 2. Zainstaluj zależności
 pip install -r requirements.txt
 
-# 3. Run migrations
+# 3. Wykonaj migracje bazy danych
 python manage.py migrate
 
-# 4. Start the server
+# 4. Uruchom serwer
 python manage.py runserver
 ```
 
-Open your browser at **http://127.0.0.1:8000**
+Otwórz przeglądarkę pod adresem **http://127.0.0.1:8000**
 
-Register a new account and start tracking your expenses!
+Zarejestruj konto i zacznij śledzić swoje wydatki!
 
-## Running with Docker
+## Uruchomienie przez Docker
 
 ```bash
-# Build and start
+# Zbuduj i uruchom
 docker-compose up --build
 
-# Open http://localhost:8000
+# Otwórz http://localhost:8000
 ```
 
-## Usage
+## Sposób użycia
 
-1. **Register** — create your account at `/register/`
-2. **Add Categories** — go to Categories and create spending categories (e.g. Food, Transport)
-3. **Set Budgets** — set monthly limits per category
-4. **Add Expenses** — log your daily expenses
-5. **Dashboard** — view charts and statistics
-6. **Currency** — check live exchange rates and convert PLN to any currency
+1. **Rejestracja** — utwórz konto pod adresem `/register/`
+2. **Kategorie** — przejdź do Kategorie i dodaj kategorie wydatków (np. Jedzenie, Transport)
+3. **Budżety** — ustaw miesięczne limity dla każdej kategorii
+4. **Wydatki** — dodawaj codzienne wydatki
+5. **Panel główny** — przeglądaj wykresy i statystyki
+6. **Waluty** — sprawdzaj aktualne kursy i przeliczaj PLN na inne waluty
 
-## Project Structure (MVC)
+## Struktura projektu (MVC)
 
 ```
 Projekt/
-├── expense_tracker/        # Django project (settings, urls)
-├── expenses/               # Main application
+├── expense_tracker/        # Projekt Django (settings, urls)
+├── expenses/               # Główna aplikacja
 │   ├── models.py           # MODEL — Category, Expense, Budget
-│   ├── views.py            # CONTROLLER — all request handling logic
-│   ├── forms.py            # Form validation
-│   ├── urls.py             # URL routing
-│   ├── admin.py            # Admin configuration
-│   ├── tests.py            # Unit tests (17 tests)
-│   └── templates/expenses/ # VIEW — all HTML templates
+│   ├── views.py            # KONTROLER — cała logika obsługi żądań
+│   ├── forms.py            # Walidacja formularzy
+│   ├── urls.py             # Routing URL
+│   ├── admin.py            # Konfiguracja panelu admina
+│   ├── tests.py            # Testy jednostkowe (17 testów)
+│   └── templates/expenses/ # WIDOK — wszystkie szablony HTML
+├── locale/                 # Tłumaczenia (PL/EN)
 ├── Dockerfile
 ├── docker-compose.yml
 └── requirements.txt
 ```
 
-### Models
+### Modele
 
-- **Category** — name, color, user (FK)
-- **Expense** — title, amount, date, category (FK), description, user (FK)
-- **Budget** — category (FK), monthly_limit, month, year, user (FK)
+- **Category** — nazwa, kolor, użytkownik (FK)
+- **Expense** — tytuł, kwota, data, kategoria (FK), opis, użytkownik (FK)
+- **Budget** — kategoria (FK), limit_miesięczny, miesiąc, rok, użytkownik (FK)
 
-## Tests
+## Testy
 
 ```bash
 python manage.py test expenses
 ```
 
-Runs 17 unit tests covering models, views, and authentication.
+Uruchamia 17 testów jednostkowych pokrywających modele, widoki i autentykację.
