@@ -1,0 +1,98 @@
+{% extends 'expenses/base.html' %}
+{% block title %}Expenses - ExpenseTracker{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Expenses</h2>
+    <a href="{% url 'expense_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Add Expense</a>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-semibold">Search</label>
+                <input type="text" name="search" class="form-control form-control-sm" placeholder="Search title..." value="{{ search }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-semibold">Category</label>
+                <select name="category" class="form-select form-select-sm">
+                    <option value="">All</option>
+                    {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-semibold">From</label>
+                <input type="date" name="date_from" class="form-control form-control-sm" value="{{ date_from }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-semibold">To</label>
+                <input type="date" name="date_to" class="form-control form-control-sm" value="{{ date_to }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-semibold">Sort by</label>
+                <select name="sort" class="form-select form-select-sm">
+                    <option value="-date" {% if sort == '-date' %}selected{% endif %}>Date ↓</option>
+                    <option value="date" {% if sort == 'date' %}selected{% endif %}>Date ↑</option>
+                    <option value="-amount" {% if sort == '-amount' %}selected{% endif %}>Amount ↓</option>
+                    <option value="amount" {% if sort == 'amount' %}selected{% endif %}>Amount ↑</option>
+                    <option value="title" {% if sort == 'title' %}selected{% endif %}>Title A-Z</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary btn-sm w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Table -->
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th class="ps-4">Date</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th class="text-end">Amount</th>
+                    <th class="text-center pe-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for e in expenses %}
+            <tr>
+                <td class="ps-4 text-muted">{{ e.date|date:"d M Y" }}</td>
+                <td class="fw-semibold">{{ e.title }}</td>
+                <td>
+                    {% if e.category %}
+                    <span class="badge" style="background-color:{{ e.category.color }}">{{ e.category.name }}</span>
+                    {% else %}<span class="text-muted small">—</span>{% endif %}
+                </td>
+                <td class="text-muted small">{{ e.description|truncatechars:40 }}</td>
+                <td class="text-end fw-bold">{{ e.amount|floatformat:2 }} PLN</td>
+                <td class="text-center pe-4">
+                    <a href="{% url 'expense_update' e.pk %}" class="btn btn-sm btn-outline-secondary me-1"><i class="bi bi-pencil"></i></a>
+                    <a href="{% url 'expense_delete' e.pk %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center text-muted py-5">No expenses found.</td></tr>
+            {% endfor %}
+            </tbody>
+            {% if expenses %}
+            <tfoot>
+                <tr class="table-light">
+                    <td colspan="4" class="ps-4 fw-bold">Total</td>
+                    <td class="text-end fw-bold text-primary">{{ total|floatformat:2 }} PLN</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% endblock %}
