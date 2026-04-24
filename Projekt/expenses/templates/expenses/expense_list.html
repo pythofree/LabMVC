@@ -1,66 +1,64 @@
 {% extends 'expenses/base.html' %}
-{% load currency_filters %}
-{% block title %}Expenses - ExpenseTracker{% endblock %}
+{% load currency_filters i18n %}
+{% block title %}{% trans "Expenses" %} - ExpenseTracker{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold">Expenses</h2>
-    <a href="{% url 'expense_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Add Expense</a>
+    <h2 class="fw-bold">{% trans "Expenses" %}</h2>
+    <a href="{% url 'expense_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>{% trans "Add Expense" %}</a>
 </div>
 
-<!-- Filters -->
 <div class="card mb-4">
     <div class="card-body">
         <form method="get" class="row g-2 align-items-end">
             <div class="col-md-3">
-                <label class="form-label small fw-semibold">Search</label>
-                <input type="text" name="search" class="form-control form-control-sm" placeholder="Search title..." value="{{ search }}">
+                <label class="form-label small fw-semibold">{% trans "Search" %}</label>
+                <input type="text" name="search" class="form-control form-control-sm" placeholder="{% trans 'Search title...' %}" value="{{ search }}">
             </div>
             <div class="col-md-2">
-                <label class="form-label small fw-semibold">Category</label>
+                <label class="form-label small fw-semibold">{% trans "Category" %}</label>
                 <select name="category" class="form-select form-select-sm">
-                    <option value="">All</option>
+                    <option value="">{% trans "All" %}</option>
                     {% for cat in categories %}
                     <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.name }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-md-2">
-                <label class="form-label small fw-semibold">From</label>
+                <label class="form-label small fw-semibold">{% trans "From" %}</label>
                 <input type="date" name="date_from" class="form-control form-control-sm" value="{{ date_from }}">
             </div>
             <div class="col-md-2">
-                <label class="form-label small fw-semibold">To</label>
+                <label class="form-label small fw-semibold">{% trans "To" %}</label>
                 <input type="date" name="date_to" class="form-control form-control-sm" value="{{ date_to }}">
             </div>
             <div class="col-md-2">
-                <label class="form-label small fw-semibold">Sort by</label>
+                <label class="form-label small fw-semibold">{% trans "Sort by" %}</label>
                 <select name="sort" class="form-select form-select-sm">
-                    <option value="-date" {% if sort == '-date' %}selected{% endif %}>Date ↓</option>
-                    <option value="date" {% if sort == 'date' %}selected{% endif %}>Date ↑</option>
-                    <option value="-amount" {% if sort == '-amount' %}selected{% endif %}>Amount ↓</option>
-                    <option value="amount" {% if sort == 'amount' %}selected{% endif %}>Amount ↑</option>
-                    <option value="title" {% if sort == 'title' %}selected{% endif %}>Title A-Z</option>
+                    <option value="-date" {% if sort == '-date' %}selected{% endif %}>{% trans "Date" %} ↓</option>
+                    <option value="date" {% if sort == 'date' %}selected{% endif %}>{% trans "Date" %} ↑</option>
+                    <option value="-amount" {% if sort == '-amount' %}selected{% endif %}>{% trans "Amount" %} ↓</option>
+                    <option value="amount" {% if sort == 'amount' %}selected{% endif %}>{% trans "Amount" %} ↑</option>
+                    <option value="title" {% if sort == 'title' %}selected{% endif %}>{% trans "Title" %} A-Z</option>
                 </select>
             </div>
             <div class="col-md-1">
-                <button type="submit" class="btn btn-primary btn-sm w-100">Filter</button>
+                <button type="submit" class="btn btn-primary btn-sm w-100">{% trans "Filter" %}</button>
             </div>
         </form>
     </div>
 </div>
 
-<!-- Table -->
 <div class="card">
     <div class="card-body p-0">
         <table class="table table-hover mb-0">
             <thead>
                 <tr>
-                    <th class="ps-4">Date</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th class="text-end">Amount</th>
-                    <th class="text-center pe-4">Actions</th>
+                    <th class="ps-4">{% trans "Date" %}</th>
+                    <th>{% trans "Title" %}</th>
+                    <th>{% trans "Category" %}</th>
+                    <th>{% trans "Description" %}</th>
+                    <th class="text-end">{% trans "Amount" %}</th>
+                    <th class="text-center pe-4">{% trans "Actions" %}</th>
                 </tr>
             </thead>
             <tbody>
@@ -81,13 +79,13 @@
                 </td>
             </tr>
             {% empty %}
-            <tr><td colspan="6" class="text-center text-muted py-5">No expenses found.</td></tr>
+            <tr><td colspan="6" class="text-center text-muted py-5">{% trans "No expenses found." %}</td></tr>
             {% endfor %}
             </tbody>
             {% if expenses %}
             <tfoot>
                 <tr class="table-light">
-                    <td colspan="4" class="ps-4 fw-bold">Total</td>
+                    <td colspan="4" class="ps-4 fw-bold">{% trans "Total" %}</td>
                     <td class="text-end fw-bold text-primary">{{ total|convert:currency_rate|floatformat:2 }} {{ currency_code }}</td>
                     <td></td>
                 </tr>
