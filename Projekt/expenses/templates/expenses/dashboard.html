@@ -1,4 +1,5 @@
 {% extends 'expenses/base.html' %}
+{% load currency_filters %}
 {% block title %}Dashboard - ExpenseTracker{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -12,7 +13,7 @@
         <div class="card stat-card border-primary h-100">
             <div class="card-body">
                 <div class="text-muted small mb-1">This Month</div>
-                <div class="fs-3 fw-bold text-primary">{{ total_month|floatformat:2 }} PLN</div>
+                <div class="fs-3 fw-bold text-primary">{{ total_month|convert:currency_rate|floatformat:2 }} {{ currency_code }}</div>
                 <div class="text-muted small">{{ now|date:"F Y" }}</div>
             </div>
         </div>
@@ -21,7 +22,7 @@
         <div class="card stat-card border-success h-100">
             <div class="card-body">
                 <div class="text-muted small mb-1">Total All Time</div>
-                <div class="fs-3 fw-bold text-success">{{ total_all|floatformat:2 }} PLN</div>
+                <div class="fs-3 fw-bold text-success">{{ total_all|convert:currency_rate|floatformat:2 }} {{ currency_code }}</div>
             </div>
         </div>
     </div>
@@ -67,7 +68,7 @@
                     <div class="mb-3">
                         <div class="d-flex justify-content-between small mb-1">
                             <span><span class="me-2" style="color:{{ b.category.color }}">&#9632;</span>{{ b.category.name }}</span>
-                            <span class="{% if b.percent_used >= 100 %}text-danger{% elif b.percent_used >= 80 %}text-warning{% else %}text-success{% endif %}">{{ b.spent|floatformat:2 }} / {{ b.monthly_limit|floatformat:2 }} PLN</span>
+                            <span class="{% if b.percent_used >= 100 %}text-danger{% elif b.percent_used >= 80 %}text-warning{% else %}text-success{% endif %}">{{ b.spent|convert:currency_rate|floatformat:2 }} / {{ b.monthly_limit|convert:currency_rate|floatformat:2 }} {{ currency_code }}</span>
                         </div>
                         <div class="progress">
                             <div class="progress-bar {% if b.percent_used >= 100 %}bg-danger{% elif b.percent_used >= 80 %}bg-warning{% else %}bg-success{% endif %}" style="width:{{ b.percent_used }}%"></div>
@@ -91,7 +92,7 @@
                     <tr>
                         <td>{{ e.date|date:"d M" }}</td>
                         <td>{{ e.title }}</td>
-                        <td class="text-end fw-semibold">{{ e.amount|floatformat:2 }} PLN</td>
+                        <td class="text-end fw-semibold">{{ e.amount|convert:currency_rate|floatformat:2 }} {{ currency_code }}</td>
                     </tr>
                     {% endfor %}
                     </tbody>

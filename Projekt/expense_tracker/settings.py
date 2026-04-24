@@ -40,6 +40,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'expenses.context_processors.currency',
                 'django.contrib.messages.context_processors.messages',
             ],
         },

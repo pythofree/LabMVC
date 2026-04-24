@@ -30,4 +30,5 @@ urlpatterns = [
 
     # Currency API
     path('currency/', views.currency_rates, name='currency_rates'),
+    path('set-currency/', views.set_currency, name='set_currency'),
 ]
