@@ -1,0 +1,201 @@
+# Polish translations for ExpenseTracker
+msgid ""
+msgstr ""
+"Project-Id-Version: ExpenseTracker\n"
+"POT-Creation-Date: 2026-04-24 23:54+0200\n"
+"PO-Revision-Date: 2026-04-24 23:54+0200\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+#: expense_tracker/settings.py:71
+msgid "English"
+msgstr "Angielski"
+
+#: expense_tracker/settings.py:72
+msgid "Polish"
+msgstr "Polski"
+
+#: expenses/templates/expenses/base.html:32
+msgid "Dashboard"
+msgstr "Panel główny"
+
+#: expenses/templates/expenses/base.html:33
+msgid "Expenses"
+msgstr "Wydatki"
+
+#: expenses/templates/expenses/base.html:34
+msgid "Categories"
+msgstr "Kategorie"
+
+#: expenses/templates/expenses/base.html:35
+msgid "Budgets"
+msgstr "Budżety"
+
+#: expenses/templates/expenses/base.html:36
+msgid "Currency"
+msgstr "Waluty"
+
+#: expenses/templates/expenses/base.html:41
+msgid "Language"
+msgstr "Język"
+
+#: expenses/templates/expenses/base.html:59
+msgid "Display currency"
+msgstr "Wyświetlana waluta"
+
+#: expenses/templates/expenses/base.html:70
+msgid "Logout"
+msgstr "Wyloguj"
+
+msgid "This Month"
+msgstr "Ten miesiąc"
+
+msgid "Total All Time"
+msgstr "Łącznie"
+
+msgid "Active Budgets"
+msgstr "Aktywne budżety"
+
+msgid "this month"
+msgstr "w tym miesiącu"
+
+msgid "Expenses by Category (this month)"
+msgstr "Wydatki według kategorii (ten miesiąc)"
+
+msgid "Monthly Spending (last 6 months)"
+msgstr "Wydatki miesięczne (ostatnie 6 miesięcy)"
+
+msgid "Budget Status"
+msgstr "Stan budżetu"
+
+msgid "No budgets set."
+msgstr "Brak budżetów."
+
+msgid "Add one"
+msgstr "Dodaj"
+
+msgid "Recent Expenses"
+msgstr "Ostatnie wydatki"
+
+msgid "No expenses yet."
+msgstr "Brak wydatków."
+
+msgid "View all"
+msgstr "Zobacz wszystkie"
+
+msgid "Add Expense"
+msgstr "Dodaj wydatek"
+
+msgid "Search"
+msgstr "Szukaj"
+
+msgid "Filter"
+msgstr "Filtruj"
+
+msgid "Category"
+msgstr "Kategoria"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Amount"
+msgstr "Kwota"
+
+msgid "Title"
+msgstr "Tytuł"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Actions"
+msgstr "Akcje"
+
+msgid "No expenses found."
+msgstr "Brak wydatków."
+
+msgid "Total"
+msgstr "Łącznie"
+
+msgid "Save"
+msgstr "Zapisz"
+
+msgid "Cancel"
+msgstr "Anuluj"
+
+msgid "Add Category"
+msgstr "Dodaj kategorię"
+
+msgid "Color"
+msgstr "Kolor"
+
+msgid "Name"
+msgstr "Nazwa"
+
+msgid "Spent this month"
+msgstr "Wydano w tym miesiącu"
+
+msgid "Set Budget"
+msgstr "Ustaw budżet"
+
+msgid "Limit"
+msgstr "Limit"
+
+msgid "Spent"
+msgstr "Wydano"
+
+msgid "Remaining"
+msgstr "Pozostało"
+
+msgid "Progress"
+msgstr "Postęp"
+
+msgid "No budgets set for this month."
+msgstr "Brak budżetów na ten miesiąc."
+
+msgid "PLN Converter"
+msgstr "Kalkulator PLN"
+
+msgid "Amount (PLN)"
+msgstr "Kwota (PLN)"
+
+msgid "Convert to"
+msgstr "Przelicz na"
+
+msgid "Convert"
+msgstr "Przelicz"
+
+msgid "Code"
+msgstr "Kod"
+
+msgid "Sign in to your account"
+msgstr "Zaloguj się do konta"
+
+msgid "Sign In"
+msgstr "Zaloguj"
+
+msgid "No account?"
+msgstr "Nie masz konta?"
+
+msgid "Register here"
+msgstr "Zarejestruj się"
+
+msgid "Create your account"
+msgstr "Utwórz konto"
+
+msgid "Create Account"
+msgstr "Zarejestruj"
+
+msgid "Already have an account?"
+msgstr "Masz już konto?"
+
+msgid "Sign in"
+msgstr "Zaloguj się"
+
+msgid "Are you sure?"
+msgstr "Jesteś pewny?"
+
+msgid "Yes, delete"
+msgstr "Tak, usuń"
