@@ -199,3 +199,45 @@ msgstr "Jesteś pewny?"
 
 msgid "Yes, delete"
 msgstr "Tak, usuń"
+
+msgid "From"
+msgstr "Od"
+
+msgid "To"
+msgstr "Do"
+
+msgid "Sort by"
+msgstr "Sortuj według"
+
+msgid "Search title..."
+msgstr "Szukaj tytułu..."
+
+msgid "All"
+msgstr "Wszystkie"
+
+msgid "No categories yet."
+msgstr "Brak kategorii."
+
+msgid "Currency Rates"
+msgstr "Kursy walut"
+
+msgid "-- Select currency --"
+msgstr "-- Wybierz walutę --"
+
+msgid "Rate (per 1 unit in PLN)"
+msgstr "Kurs (za 1 jednostkę w PLN)"
+
+msgid "You are about to delete"
+msgstr "Zamierzasz usunąć"
+
+msgid "This action cannot be undone."
+msgstr "Tej operacji nie można cofnąć."
+
+msgid "Delete"
+msgstr "Usuń"
+
+msgid "Login"
+msgstr "Logowanie"
+
+msgid "Register"
+msgstr "Rejestracja"

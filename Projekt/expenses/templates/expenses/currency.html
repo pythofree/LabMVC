@@ -1,7 +1,8 @@
 {% extends 'expenses/base.html' %}
-{% block title %}Currency Rates - ExpenseTracker{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Currency Rates" %} - ExpenseTracker{% endblock %}
 {% block content %}
-<h2 class="fw-bold mb-4">Currency Rates <small class="text-muted fs-6">(NBP API)</small></h2>
+<h2 class="fw-bold mb-4">{% trans "Currency Rates" %} <small class="text-muted fs-6">(NBP API)</small></h2>
 
 {% if error %}
 <div class="alert alert-danger">{{ error }}</div>
@@ -10,23 +11,23 @@
 <!-- Converter -->
 <div class="card mb-4">
     <div class="card-body">
-        <h6 class="fw-bold mb-3"><i class="bi bi-calculator me-2"></i>PLN Converter</h6>
+        <h6 class="fw-bold mb-3"><i class="bi bi-calculator me-2"></i>{% trans "PLN Converter" %}</h6>
         <form method="get" class="row g-2 align-items-end">
             <div class="col-md-4">
-                <label class="form-label small fw-semibold">Amount (PLN)</label>
+                <label class="form-label small fw-semibold">{% trans "Amount (PLN)" %}</label>
                 <input type="number" name="amount" class="form-control" placeholder="100.00" step="0.01" min="0" value="{{ amount_pln }}">
             </div>
             <div class="col-md-5">
-                <label class="form-label small fw-semibold">Convert to</label>
+                <label class="form-label small fw-semibold">{% trans "Convert to" %}</label>
                 <select name="currency" class="form-select">
-                    <option value="">-- Select currency --</option>
+                    <option value="">{% trans "-- Select currency --" %}</option>
                     {% for r in rates %}
                     <option value="{{ r.code }}" {% if r.code == selected_currency %}selected{% endif %}>{{ r.code }} — {{ r.currency }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-md-3">
-                <button type="submit" class="btn btn-primary w-100">Convert</button>
+                <button type="submit" class="btn btn-primary w-100">{% trans "Convert" %}</button>
             </div>
         </form>
         {% if converted %}
@@ -45,9 +46,9 @@
         <table class="table table-hover mb-0">
             <thead>
                 <tr>
-                    <th class="ps-4">Code</th>
-                    <th>Currency</th>
-                    <th class="text-end pe-4">Rate (per 1 unit in PLN)</th>
+                    <th class="ps-4">{% trans "Code" %}</th>
+                    <th>{% trans "Currency" %}</th>
+                    <th class="text-end pe-4">{% trans "Rate (per 1 unit in PLN)" %}</th>
                 </tr>
             </thead>
             <tbody>
