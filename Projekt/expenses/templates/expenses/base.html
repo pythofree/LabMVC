@@ -44,13 +44,13 @@
                             {% csrf_token %}
                             <input type="hidden" name="language" value="en">
                             <input type="hidden" name="next" value="{{ request.path }}">
-                            <button type="submit" class="btn btn-sm w-100 {% if LANGUAGE_CODE == 'en' %}btn-warning{% else %}btn-outline-light{% endif %}">EN</button>
+                            <button type="submit" class="btn btn-sm w-100 {% if request.LANGUAGE_CODE == 'en' %}btn-warning{% else %}btn-outline-light{% endif %}">EN</button>
                         </form>
                         <form method="post" action="{% url 'set_language' %}" class="flex-fill">
                             {% csrf_token %}
                             <input type="hidden" name="language" value="pl">
                             <input type="hidden" name="next" value="{{ request.path }}">
-                            <button type="submit" class="btn btn-sm w-100 {% if LANGUAGE_CODE == 'pl' %}btn-warning{% else %}btn-outline-light{% endif %}">PL</button>
+                            <button type="submit" class="btn btn-sm w-100 {% if request.LANGUAGE_CODE == 'pl' %}btn-warning{% else %}btn-outline-light{% endif %}">PL</button>
                         </form>
                     </div>
                 </div>
