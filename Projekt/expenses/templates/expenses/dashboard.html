@@ -1,0 +1,131 @@
+{% extends 'expenses/base.html' %}
+{% block title %}Dashboard - ExpenseTracker{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Dashboard</h2>
+    <a href="{% url 'expense_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg me-1"></i>Add Expense</a>
+</div>
+
+<!-- Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card border-primary h-100">
+            <div class="card-body">
+                <div class="text-muted small mb-1">This Month</div>
+                <div class="fs-3 fw-bold text-primary">{{ total_month|floatformat:2 }} PLN</div>
+                <div class="text-muted small">{{ now|date:"F Y" }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card border-success h-100">
+            <div class="card-body">
+                <div class="text-muted small mb-1">Total All Time</div>
+                <div class="fs-3 fw-bold text-success">{{ total_all|floatformat:2 }} PLN</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card border-warning h-100">
+            <div class="card-body">
+                <div class="text-muted small mb-1">Active Budgets</div>
+                <div class="fs-3 fw-bold text-warning">{{ budgets.count }}</div>
+                <div class="text-muted small">this month</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="row g-3 mb-4">
+    <div class="col-md-5">
+        <div class="card h-100">
+            <div class="card-body">
+                <h6 class="card-title fw-bold mb-3">Expenses by Category (this month)</h6>
+                <canvas id="pieChart" height="220"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card h-100">
+            <div class="card-body">
+                <h6 class="card-title fw-bold mb-3">Monthly Spending (last 6 months)</h6>
+                <canvas id="barChart" height="220"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Budgets & Recent -->
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title fw-bold mb-3">Budget Status</h6>
+                {% if budgets %}
+                    {% for b in budgets %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small mb-1">
+                            <span><span class="me-2" style="color:{{ b.category.color }}">&#9632;</span>{{ b.category.name }}</span>
+                            <span class="{% if b.percent_used >= 100 %}text-danger{% elif b.percent_used >= 80 %}text-warning{% else %}text-success{% endif %}">{{ b.spent|floatformat:2 }} / {{ b.monthly_limit|floatformat:2 }} PLN</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar {% if b.percent_used >= 100 %}bg-danger{% elif b.percent_used >= 80 %}bg-warning{% else %}bg-success{% endif %}" style="width:{{ b.percent_used }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted small">No budgets set. <a href="{% url 'budget_create' %}">Add one</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title fw-bold mb-3">Recent Expenses</h6>
+                {% if recent_expenses %}
+                <table class="table table-sm">
+                    <tbody>
+                    {% for e in recent_expenses %}
+                    <tr>
+                        <td>{{ e.date|date:"d M" }}</td>
+                        <td>{{ e.title }}</td>
+                        <td class="text-end fw-semibold">{{ e.amount|floatformat:2 }} PLN</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <a href="{% url 'expense_list' %}" class="btn btn-outline-primary btn-sm">View all</a>
+                {% else %}
+                    <p class="text-muted small">No expenses yet. <a href="{% url 'expense_create' %}">Add one</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const pieCtx = document.getElementById('pieChart').getContext('2d');
+new Chart(pieCtx, {
+    type: 'doughnut',
+    data: {
+        labels: {{ chart_labels|safe }},
+        datasets: [{ data: {{ chart_amounts|safe }}, backgroundColor: {{ chart_colors|safe }}, borderWidth: 2 }]
+    },
+    options: { plugins: { legend: { position: 'bottom' } }, cutout: '60%' }
+});
+
+const barCtx = document.getElementById('barChart').getContext('2d');
+new Chart(barCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ monthly_labels|safe }},
+        datasets: [{ label: 'PLN', data: {{ monthly_amounts|safe }}, backgroundColor: 'rgba(13,110,253,0.7)', borderRadius: 6 }]
+    },
+    options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
+</script>
+{% endblock %}
