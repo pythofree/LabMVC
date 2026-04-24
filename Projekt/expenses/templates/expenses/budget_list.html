@@ -1,4 +1,5 @@
 {% extends 'expenses/base.html' %}
+{% load currency_filters %}
 {% block title %}Budgets - ExpenseTracker{% endblock %}
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -22,9 +23,9 @@
             {% for b in budgets %}
             <tr>
                 <td class="ps-4 fw-semibold"><span class="me-2" style="color:{{ b.category.color }}">&#9632;</span>{{ b.category.name }}</td>
-                <td>{{ b.monthly_limit|floatformat:2 }} PLN</td>
-                <td>{{ b.spent|floatformat:2 }} PLN</td>
-                <td class="{% if b.remaining < 0 %}text-danger fw-bold{% else %}text-success{% endif %}">{{ b.remaining|floatformat:2 }} PLN</td>
+                <td>{{ b.monthly_limit|convert:currency_rate|floatformat:2 }} {{ currency_code }}</td>
+                <td>{{ b.spent|convert:currency_rate|floatformat:2 }} {{ currency_code }}</td>
+                <td class="{% if b.remaining < 0 %}text-danger fw-bold{% else %}text-success{% endif %}">{{ b.remaining|convert:currency_rate|floatformat:2 }} {{ currency_code }}</td>
                 <td style="min-width:150px">
                     <div class="progress">
                         <div class="progress-bar {% if b.percent_used >= 100 %}bg-danger{% elif b.percent_used >= 80 %}bg-warning{% else %}bg-success{% endif %}" style="width:{{ b.percent_used }}%"></div>

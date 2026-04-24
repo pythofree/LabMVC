@@ -1,4 +1,5 @@
 import json
+import ssl
 import urllib.request
 from datetime import date
 from decimal import Decimal
@@ -256,6 +257,37 @@ def budget_delete(request, pk):
     return render(request, 'expenses/confirm_delete.html', {'object': budget, 'type': 'budget'})
 
 
+# ── CURRENCY SWITCH ───────────────────────────────────────────────────────────
+
+def fetch_rates():
+    url = 'https://api.nbp.pl/api/exchangerates/tables/A/?format=json'
+    ctx = ssl.create_default_context()
+    ctx.check_hostname = False
+    ctx.verify_mode = ssl.CERT_NONE
+    with urllib.request.urlopen(url, timeout=5, context=ctx) as response:
+        data = json.loads(response.read())
+        return data[0]['rates']
+
+
+@login_required
+def set_currency(request):
+    code = request.GET.get('code', 'PLN')
+    if code == 'PLN':
+        request.session['currency_code'] = 'PLN'
+        request.session['currency_rate'] = '1'
+    else:
+        try:
+            rates = fetch_rates()
+            for r in rates:
+                if r['code'] == code:
+                    request.session['currency_code'] = code
+                    request.session['currency_rate'] = str(r['mid'])
+                    break
+        except Exception:
+            pass
+    return redirect(request.GET.get('next', 'dashboard'))
+
+
 # ── CURRENCY API ──────────────────────────────────────────────────────────────
 
 @login_required
@@ -267,10 +299,7 @@ def currency_rates(request):
     selected_currency = request.GET.get('currency', '')
 
     try:
-        url = 'https://api.nbp.pl/api/exchangerates/tables/A/?format=json'
-        with urllib.request.urlopen(url, timeout=5) as response:
-            data = json.loads(response.read())
-            rates = data[0]['rates']
+        rates = fetch_rates()
 
         if amount_pln and selected_currency:
             amount = Decimal(str(amount_pln))
