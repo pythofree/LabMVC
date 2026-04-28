@@ -1,24 +1,186 @@
 {% load currency_filters i18n %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
+<html lang="{{ request.LANGUAGE_CODE }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}ExpenseTracker{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
-        .sidebar { position: fixed; top: 0; left: 0; height: 100vh; width: 16.66%; overflow-y: auto; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); z-index: 100; }
+        * { font-family: 'Inter', sans-serif; }
+
+        body {
+            background-color: #1c1c1e;
+            min-height: 100vh;
+            color: #d4d4d4;
+        }
+
+        /* ── Sidebar ── */
+        .sidebar {
+            position: fixed; top: 0; left: 0; height: 100vh; width: 16.66%;
+            overflow-y: auto; z-index: 100;
+            background: #141416;
+            border-right: 1px solid rgba(255,255,255,0.06);
+        }
         .main-content { margin-left: 16.66%; }
-        .sidebar .nav-link { color: rgba(255,255,255,0.75); border-radius: 8px; margin: 2px 8px; }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active { background: rgba(255,255,255,0.15); color: #fff; }
-        .sidebar .brand { color: #fff; font-size: 1.3rem; font-weight: 700; padding: 1.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .card { border: none; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-        .stat-card { border-left: 4px solid; }
-        .table thead th { background-color: #f1f3f5; font-weight: 600; border-bottom: 2px solid #dee2e6; }
-        .badge-category { border-radius: 20px; font-size: 0.8rem; }
-        .progress { height: 10px; border-radius: 5px; }
+
+        .sidebar .brand {
+            color: #fff; font-size: 1.15rem; font-weight: 700;
+            padding: 1.5rem 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            letter-spacing: -0.02em;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .sidebar .brand i { color: #e5e5e5; font-size: 1.1rem; }
+
+        .sidebar .nav-link {
+            color: #666;
+            border-radius: 8px;
+            margin: 1px 10px;
+            padding: 0.55rem 0.85rem;
+            transition: all 0.15s ease;
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .sidebar .nav-link i { font-size: 0.95rem; width: 16px; }
+        .sidebar .nav-link:hover { background: rgba(255,255,255,0.05); color: #ccc; }
+        .sidebar .nav-link.active {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* ── Cards ── */
+        .card {
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 14px;
+            background: #242428;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2);
+            color: #d4d4d4;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            border-color: rgba(255,255,255,0.12);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 12px 32px rgba(0,0,0,0.3);
+        }
+
+        .stat-card { border-left: 2px solid #fff; }
+        .stat-card.border-primary { border-left-color: #fff !important; }
+        .stat-card.border-success { border-left-color: #aaa !important; }
+        .stat-card.border-warning { border-left-color: #666 !important; }
+
+        /* ── Tables ── */
+        .table { color: #d4d4d4; border-color: #2a2a2e; --bs-table-bg: #222226; }
+        .table > :not(caption) > * > * { background-color: #222226; color: #d4d4d4; border-bottom-color: #2a2a2e; }
+        .table thead th {
+            background: #1c1c20 !important;
+            color: #666;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            border-bottom: 1px solid #2a2a2e !important;
+        }
+        .table tbody tr { transition: background 0.1s; }
+        .table tbody tr > * { background-color: #222226 !important; }
+        .table-hover tbody tr:hover > * { background-color: #28282d !important; }
+        .table td, .table th { border-color: #2a2a2e; vertical-align: middle; }
+        .table-light > * { background-color: #28282d !important; color: #d4d4d4 !important; }
+
+        /* ── Buttons ── */
+        .btn { border-radius: 8px; font-weight: 500; font-size: 0.875rem; transition: all 0.15s ease; }
+        .btn-primary { background: #e8e8e8; border: none; color: #111; font-weight: 600; }
+        .btn-primary:hover { background: #fff; color: #000; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .btn-sm { font-size: 0.8rem; padding: 0.3rem 0.65rem; border-radius: 6px; }
+        .btn-outline-secondary { border-color: rgba(255,255,255,0.12); color: #999; background: transparent; }
+        .btn-outline-secondary:hover { background: rgba(255,255,255,0.07); color: #e0e0e0; border-color: rgba(255,255,255,0.2); }
+        .btn-outline-danger { border-color: rgba(255,255,255,0.1); color: #888; background: transparent; }
+        .btn-outline-danger:hover { background: rgba(255,80,80,0.12); color: #ff8080; border-color: rgba(255,80,80,0.3); }
+        .btn-outline-primary { border-color: rgba(255,255,255,0.15); color: #bbb; background: transparent; }
+        .btn-outline-primary:hover { background: rgba(255,255,255,0.07); color: #fff; border-color: rgba(255,255,255,0.25); }
+        .btn-outline-light { border-color: rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); }
+        .btn-outline-light:hover { background: rgba(255,255,255,0.07); color: #fff; border-color: rgba(255,255,255,0.25); }
+        .btn-warning { background: #e8e8e8; border: none; color: #111; font-weight: 700; }
+        .btn-warning:hover { background: #fff; color: #000; }
+        .btn-success { background: #e8e8e8; border: none; color: #111; font-weight: 600; }
+        .btn-success:hover { background: #fff; color: #000; }
+        .btn-danger { background: rgba(200,50,50,0.8); border: none; color: #fff; font-weight: 600; }
+        .btn-danger:hover { background: rgba(220,60,60,0.9); }
+
+        /* ── Forms ── */
+        .form-control, .form-select {
+            background: #1c1c20;
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #d4d4d4;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+        .form-control:focus, .form-select:focus {
+            background: #222226;
+            border-color: rgba(255,255,255,0.25);
+            color: #fff;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
+        }
+        .form-control::placeholder { color: #444; }
+        .form-label { color: #666; font-weight: 500; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        option { background: #1c1c20; color: #d4d4d4; }
+
+        /* ── Progress ── */
+        .progress { height: 5px; border-radius: 6px; background: rgba(255,255,255,0.07); }
+        .progress-bar { border-radius: 6px; transition: width 0.5s ease; }
+        .bg-success { background: #d4d4d4 !important; }
+        .bg-warning { background: #888 !important; }
+        .bg-danger  { background: #c84040 !important; }
+
+        /* ── Alerts ── */
+        .alert { border-radius: 10px; font-size: 0.875rem; }
+        .alert-success { background: rgba(255,255,255,0.05); color: #bbb; border-color: rgba(255,255,255,0.1); }
+        .alert-danger  { background: rgba(200,50,50,0.1); color: #f09090; border-color: rgba(200,50,50,0.2); }
+
+        /* ── Misc ── */
+        .text-muted { color: #555 !important; }
+        .text-primary { color: #e0e0e0 !important; }
+        .text-success { color: #bbb !important; }
+        .text-warning { color: #999 !important; }
+        .text-danger  { color: #c84040 !important; }
+        h2, h3, h4, h5, h6 { color: #f0f0f0; }
+        .fw-bold { color: #e8e8e8; }
+        .fw-semibold { color: #d0d0d0; }
+        .card-title { color: #888; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
+        .fs-3.fw-bold { color: #fff; font-size: 1.6rem !important; }
+        a { color: #999; text-decoration: none; }
+        a:hover { color: #e0e0e0; }
+        .badge { font-weight: 500; font-size: 0.75rem; }
+        small, .small { font-size: 0.8rem; }
+
+        /* ── Flatpickr dark ── */
+        .flatpickr-calendar {
+            background: #242428;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            color: #d4d4d4;
+        }
+        .flatpickr-day { color: #ccc; border-radius: 6px; }
+        .flatpickr-day:hover { background: rgba(255,255,255,0.1); border-color: transparent; color: #fff; }
+        .flatpickr-day.selected, .flatpickr-day.selected:hover { background: #e8e8e8; border-color: #e8e8e8; color: #111; }
+        .flatpickr-day.today { border-color: rgba(255,255,255,0.3); }
+        .flatpickr-months .flatpickr-month, .flatpickr-weekdays, span.flatpickr-weekday { background: #242428; color: #aaa; fill: #aaa; }
+        .flatpickr-current-month .flatpickr-monthDropdown-months { background: #242428; color: #e0e0e0; }
+        .flatpickr-current-month input.cur-year { color: #e0e0e0; }
+        .flatpickr-prev-month svg, .flatpickr-next-month svg { fill: #888; }
+        .flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg { fill: #fff; }
+        .flatpickr-day.flatpickr-disabled, .flatpickr-day.flatpickr-disabled:hover { color: #444; }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
     </style>
 </head>
 <body>
@@ -92,6 +254,16 @@
 {% endif %}
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pl.js"></script>
+<script>
+    const lang = "{{ request.LANGUAGE_CODE }}";
+    flatpickr('input[type="date"]', {
+        locale: lang === 'pl' ? 'pl' : 'default',
+        dateFormat: 'Y-m-d',
+        allowInput: true,
+    });
+</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
